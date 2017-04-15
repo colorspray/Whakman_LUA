@@ -1,0 +1,56 @@
+Starbreeze Work Test -- Gameplay Programmer
+============================================
+
+Background
+----------
+
+Starbreeze uses fully featured, modern, object-oriented scripting languages.
+Scripting in Starbreeze games goes far beyond simply connecting triggers and
+events. In fact, the entire gameplay logic: animation, AI, vehicles, etc,
+is written in the scripting language. This gives great flexibility, but it
+also puts a high demand on the scripter. She must not only be able to
+think and learn quickly but also have good general programming and problem
+solving skills.
+
+
+The Task
+--------
+
+The task is to create Whakman, a simple Pacman like game using the 
+scripting language Lua <http://www.lua.org/> and SDL
+<http://www.libsdl.org/> with various extensions added (SDL_Image,
+SDL_ttf, SDL_Net and SDL_Mixer)
+We provide some images and scripts to get you started.
+
+You can choose to do a straight up Pacman clone, a Pacman game with
+some kind of twist or a completely different game. Choose whatever is
+more interesting to you.
+
+Submit the finished code to us, together with a short note (in Swedish
+or English). In the note you should tell us what we should look for in
+your submission, what you are the most proud of in the implementation and
+what you wanted to have done better.
+
+
+Instructions
+------------
+
+1.  Test Whakman by executing luasdl.exe. The game initialization code
+	is in __init__.lua.
+
+2.	You should see a window with some walls, Whakman, a ghost and a simple OSD.
+
+3.	Write your own game. Use the code in `Whakman.lua` as an example on
+	how to load and draw images, fonts etc.. Your code does not need to follow 
+	the structure of `Whakman.lua`, feel free to reorganize and refactor if you 
+	think it makes the code better.
+
+
+Manuals
+-------
+Lua		http://www.lua.org/manual/5.1/
+SDL		http://wiki.libsdl.org/FrontPage
+SDL_ttf		http://jcatki.no-ip.org:8080/SDL_ttf/
+SDL_net		http://jcatki.no-ip.org:8080/SDL_net/
+SDL_Image	http://jcatki.no-ip.org:8080/SDL_image/
+SDL_mixer	http://jcatki.no-ip.org:8080/SDL_mixer/
