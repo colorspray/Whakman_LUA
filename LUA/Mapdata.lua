@@ -70,7 +70,3 @@ function Mapdata:PrintData()
     end
   end
 end
-
-local test = Mapdata:new()
-test:PrintData()
-test:Save()
