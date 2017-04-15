@@ -1,31 +1,35 @@
 require "Mapdata"
+require "Tile"
 
 Map = class()
 
-local mapdata
-local mapIndicator = {}
-mapIndicator[1] = {"wall_cross.png", 0}
-mapIndicator[2] = {"wall_end.png", 0}
-mapIndicator[3] = {"wall_end.png", 90}
-mapIndicator[4] = {"wall_end.png", 180}
-mapIndicator[5] = {"wall_end.png", 270}
-mapIndicator[6] = {"wall_straight.png", 0}
-mapIndicator[7] = {"wall_straight.png", 90}
-mapIndicator[8] = {"wall_t.png", 0}
-mapIndicator[9] = {"wall_t.png", 90}
-mapIndicator[10] = {"wall_t.png", 180}
-mapIndicator[11] = {"wall_t.png", 270}
-mapIndicator[12] = {"wall_turn.png", 0}
-mapIndicator[13] = {"wall_turn.png", 90}
-mapIndicator[14] = {"wall_turn.png", 180}
-mapIndicator[15] = {"wall_turn.png", 270}
-
 function Map:init()
-  mapdata = Mapdata:new()
+  local mapdataObj = Mapdata:new()
+  self.mapdata = mapdataObj:Getdata()
+  self.height, self.width = mapdataObj:Shape()
+  
+  local tiles = {}
+  for i = 1, self.height do
+    tiles[i] = {}
+    for j = 1, self.width do
+      local data = self.mapdata[i][j]  
+      
+      tiles[i][j] = Tile:new(self:Decode(data))
+      tiles[i][j]:initActor(i, j)
+    end
+  end
+  self.tiles = tiles
 end
 
+function Map:Decode(data)
+  i = math.floor(data / 4)
+  j = data % 4
+  return {i, j}
+end
 
+--[[
 local map = Map:new()
+]]--
 
 
 

@@ -44,6 +44,16 @@ function Mapdata:init()
   end
 end
 
+function Mapdata:Shape()
+  i = table.getn(myCharacters)
+  j = table.getn(myCharacters[1])
+  return i, j
+end
+
+function Mapdata:Getdata()
+  return myCharacters
+end
+
 function Mapdata:Save()
   myFile = io.open(mapName, "w")
   if myFile ~= nil then

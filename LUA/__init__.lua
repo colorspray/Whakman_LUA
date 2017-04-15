@@ -1,10 +1,11 @@
-zbsPath = "e:/ZeroBraneStudio130"
+zbsPath = "f:/ZeroBraneStudio1_30"
 package.path = package.path .. ";"..zbsPath.."/lualibs/?/?.lua;"..zbsPath.."/lualibs/?.lua"
 package.cpath = package.cpath..";"..zbsPath.."/bin/?.dll;"..zbsPath.."/bin/clibs/?.dll;"
 require('mobdebug').start('127.0.0.1')
 
 require "System"
 require "FontManager"
+require "Map"
 
 ---------------------------------------------------------------------------------------------------
 
@@ -174,6 +175,14 @@ function main()
 	local draw_list = {ghost, whak, osd_lives}
 	local update_list = {whak}
 
+  local map = Map:new()
+  for x=1, table.getn(map.tiles) do
+    dataList = map.tiles[x]
+    for y = 1, table.getn(dataList) do
+      table.insert(draw_list, 1, dataList[y].actor)
+    end
+  end
+  
 	-- Create a sample maze. You will want to replace this with a better maze
   --[[
 	local x,y
