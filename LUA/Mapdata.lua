@@ -69,7 +69,6 @@ function Mapdata:Save()
   io.close(myFile)
 end
 
-
 function Mapdata:PrintData()
   for index = 1, table.getn(myCharacters) do
     myLabels = myCharacters[index]

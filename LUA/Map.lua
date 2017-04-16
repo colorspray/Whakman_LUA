@@ -61,6 +61,19 @@ function Map:generatePath()
   end
 end
 
+function Map:generateCoins()
+  local coins = {}
+  for i = 1, self.height do
+    for j = 1, self.width do
+      local coin = self.tiles[i][j]:generateCoin()
+      if coin ~= nil then
+        table.insert(coins, coin)
+      end
+    end
+  end
+  return coins
+end  
+
 function Map:MoveActor(actor, direction, speed)
   local i = math.floor(actor.y / 64 + 0.5) + 1
   local j = math.floor(actor.x / 64 + 0.5) + 1
@@ -95,6 +108,13 @@ function Map:MoveActor(actor, direction, speed)
       actor.x = currentTile.nodex
     end
   end
+end
+
+function Map:CheckEatCoin(whake)
+  local i = math.floor(whake.y / 64 + 0.5) + 1
+  local j = math.floor(whake.x / 64 + 0.5) + 1
+  local currentTile = self.tiles[i][j]
+  currentTile:EatCoin()
 end
 
 function Map:Decode(data)

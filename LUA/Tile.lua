@@ -31,6 +31,12 @@ function Tile:init(tileInfo, i, j)
     self.angle = 90 * (self.turn)
   end
   
+  if self.picFile ~= constFileNames[1] then
+    self.initCoin = true
+  else
+    self.initCoin = false
+  end
+  
   self.linkage = {}
   self.linkage[1], self.linkage[2], self.linkage[3], self.linkage[4] = constTableLinkage[self.picFile][1],constTableLinkage[self.picFile][2],constTableLinkage[self.picFile][3],constTableLinkage[self.picFile][4]
   
@@ -42,6 +48,23 @@ function Tile:init(tileInfo, i, j)
   
   self:initActor(i, j)
   self:initNode()
+end
+
+function Tile:generateCoin()
+  if self.initCoin then
+    self.coinGen = CoinClass:new() 
+    self.coinGen.x = self.x
+    self.coinGen.y = self.y
+  else
+    self.coinGen = nil
+  end
+  return self.coinGen
+end
+
+function Tile:EatCoin()
+  if self.coinGen ~= nil then 
+    self.coinGen:Eaten()
+  end
 end
 
 function Tile:shiftClockwise()

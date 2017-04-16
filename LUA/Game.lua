@@ -1,7 +1,7 @@
 Game = class()
 
-local draw_list
-local update_list
+draw_list = nil
+update_list = nil
 map = nil
 
 local font_size_osd = 24
@@ -12,6 +12,7 @@ StateEditor = "StateEditor"
 
 function Game:init()
   font_osd = LoadFont("LondonBetween.ttf", font_size_osd)
+  math.randomseed(os.time())
 end
 
 function Game:InitGame()
@@ -32,7 +33,7 @@ function Game:InitGame()
 	local osd_lives = OSDItem:new(Image("osd_whakman.png"), font_osd, col_osd, "Whakmans:", 0, osd_x, osd_y)
 
 	-- Add actors to relevant list
-  draw_list = {ghost, whak, osd_lives}
+  draw_list = {whak, osd_lives}
   update_list = {whak}
 
   map = Map:new()
@@ -43,6 +44,11 @@ function Game:InitGame()
         table.insert(draw_list, 1, dataList[y])
       end
     end
+  end
+  
+  coins = map:generateCoins()
+  for x = 1, table.getn(coins) do
+    table.insert(draw_list, #draw_list - 1, coins[x])
   end
 end
   
@@ -77,6 +83,7 @@ function Game:Run()
 		for _,v in pairs(update_list)	do 
       v:update(delta_time) 
     end
+    
 		for _,v in pairs(draw_list)	do 
       v:draw() 
     end
