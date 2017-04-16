@@ -1,9 +1,9 @@
-
+--[[
 zbsPath = "f:/ZeroBraneStudio1_30"
 package.path = package.path .. ";"..zbsPath.."/lualibs/?/?.lua;"..zbsPath.."/lualibs/?.lua"
 package.cpath = package.cpath..";"..zbsPath.."/bin/?.dll;"..zbsPath.."/bin/clibs/?.dll;"
 require('mobdebug').start('127.0.0.1')
-
+]]--
 require "System"
 require "FontManager"
 require "Actors"

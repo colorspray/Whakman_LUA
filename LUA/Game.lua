@@ -19,7 +19,7 @@ function Game:InitGame()
   self.state = StateGame	
 
 	-- Create Whakman
-	local whak = Whakman:new({Image("whakman_01.png"), Image("whakman_02.png")})
+	local whak = Whakman:new()
 	whak.x,whak.y = 0,0
 
 	-- Create Ghost

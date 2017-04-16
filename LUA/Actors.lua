@@ -29,12 +29,14 @@ end
 Whakman = class(Actor)
 
 Whakman.MOUTH_TIMER_FRAME_LENGTH = 0.3
+Whakman.ImageNames = {"whakman_01.png", "whakman_02.png"}
 
-function Whakman:init(images)
-	Actor:init(images[1])
-	self.images = images
+function Whakman:init()
+  self:initImages()
+	Actor:init(self.images[2][1])
 	self.image_index = 1
 	self.mouth_timer = 1
+  self.direction = 2
 end
 
 function Whakman:update(dt)
@@ -52,19 +54,43 @@ function Whakman:update_mouth(dt)
 end
 
 function Whakman:update_keys(dt)
-	local move_speed = 120*dt	-- 120 pixels per second
+	local move_speed = 200*dt	-- 200 pixels per second
 	if KEYS[SDL.SDLK_UP] == true then 
     map:MoveActor(self, 1, move_speed)
+    self.direction = 1
   elseif KEYS[SDL.SDLK_RIGHT] == true then
     map:MoveActor(self, 2, move_speed)
+    self.direction = 2
   elseif KEYS[SDL.SDLK_DOWN] == true then
     map:MoveActor(self, 3, move_speed)
+    self.direction = 3
   elseif KEYS[SDL.SDLK_LEFT] == true then
     map:MoveActor(self, 4, move_speed) 
+    self.direction = 4
+  end
+  self:updateDirection()
+end
+
+function Whakman:initImages()
+  self.images = {}
+  self.images[1] = {}
+  self.images[2] = {}
+  self.images[3] = {}
+  self.images[4] = {}
+  
+  for i = 1, 2 do
+    self.images[1][i] = Image(Whakman.ImageNames[i], 270)
+    self.images[2][i] = Image(Whakman.ImageNames[i])
+    self.images[3][i] = Image(Whakman.ImageNames[i], 90)
+    self.images[4][i] = Image(Whakman.ImageNames[i], 0, "H")
   end
 end
 
+function Whakman:updateDirection()
+  self.image = self.images[self.direction][self.image_index]
+end
+
 function Whakman:flip_mouth()
-	self.image_index = (self.image_index % #self.images) + 1
-	self.image = self.images[self.image_index]
+	self.image_index = (self.image_index % #self.images[1]) + 1
+	self.image = self.images[self.direction][self.image_index]
 end

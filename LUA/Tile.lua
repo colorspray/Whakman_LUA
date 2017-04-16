@@ -52,7 +52,7 @@ end
 
 function Tile:generateCoin()
   if self.initCoin then
-    self.coinGen = CoinClass:new() 
+    self.coinGen = Item:new() 
     self.coinGen.x = self.x
     self.coinGen.y = self.y
   else
