@@ -1,5 +1,3 @@
-require "System"
-
 Mapdata = class()
 
 local mapName = "mapData.csv"

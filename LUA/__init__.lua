@@ -1,3 +1,4 @@
+
 zbsPath = "f:/ZeroBraneStudio1_30"
 package.path = package.path .. ";"..zbsPath.."/lualibs/?/?.lua;"..zbsPath.."/lualibs/?.lua"
 package.cpath = package.cpath..";"..zbsPath.."/bin/?.dll;"..zbsPath.."/bin/clibs/?.dll;"
@@ -5,11 +6,12 @@ require('mobdebug').start('127.0.0.1')
 
 require "System"
 require "FontManager"
-require "Map"
+
 
 ---------------------------------------------------------------------------------------------------
 
 KEYS = {} -- This array is filled in by HandleEvent and can be read at any time to check if a key is pressed
+Mouse = nil
 
 -- Return true from this function when game should stop
 function HandleEvent(event)
@@ -27,6 +29,10 @@ function HandleEvent(event)
 	elseif c == SDL.SDL_QUIT then
 		return true
 	end
+  
+  if c == SDL.SDL_MOUSEBUTTONUP then
+    Mouse = event.button
+  end
 
 	return false
 end
@@ -59,6 +65,9 @@ function Actor:draw()
 	SDL.SDL_BlitSurface(self.image, nil, SYS_SCREEN, self.rect)
 end
 
+require "Map"
+require "Game"
+
 ---------------------------------------------------------------------------------------------------
 
 -- Class for Whakman, inherits from Actor
@@ -89,10 +98,15 @@ end
 
 function Whakman:update_keys(dt)
 	local move_speed = 120*dt	-- 120 pixels per second
-	if KEYS[SDL.SDLK_UP] == true then self.y = self.y-move_speed end
-	if KEYS[SDL.SDLK_DOWN] == true then self.y = self.y+move_speed end
-	if KEYS[SDL.SDLK_LEFT] == true then self.x = self.x-move_speed end
-	if KEYS[SDL.SDLK_RIGHT] == true then self.x = self.x+move_speed end
+	if KEYS[SDL.SDLK_UP] == true then 
+    map:MoveActor(self, 1, move_speed)
+  elseif KEYS[SDL.SDLK_RIGHT] == true then
+    map:MoveActor(self, 2, move_speed)
+  elseif KEYS[SDL.SDLK_DOWN] == true then
+    map:MoveActor(self, 3, move_speed)
+  elseif KEYS[SDL.SDLK_LEFT] == true then
+    map:MoveActor(self, 4, move_speed) 
+  end
 end
 
 function Whakman:flip_mouth()
@@ -152,78 +166,9 @@ end
 function main()
 	-- Initialize SDL
 	SystemInit()
-
-	--
-	local font_size_osd = 24
-	local font_osd = LoadFont("LondonBetween.ttf", font_size_osd)
-
-	-- Create Whakman
-	local whak = Whakman:new({Image("whakman_01.png"), Image("whakman_02.png")})
-	whak.x,whak.y = 100,100
-
-	-- Create Ghost
-	local ghost = Actor:new(Image("ghost_01.png"))
-	ghost.x,ghost.y = 200,200
-
-	-- Create OSD item
-	local col_osd = SDL.SDL_Color_local()
-	col_osd.r,col_osd.g,col_osd.b = 0xff,0xff,0xff
-	local osd_x,osd_y = 10, SYS_SCREEN.h-font_size_osd-10
-	local osd_lives = OSDItem:new(Image("osd_whakman.png"), font_osd, col_osd, "Whakmans:", 0, osd_x, osd_y)
-
-	-- Add actors to relevant list
-	local draw_list = {ghost, whak, osd_lives}
-	local update_list = {whak}
-
-  local map = Map:new()
-  for x=1, table.getn(map.tiles) do
-    dataList = map.tiles[x]
-    for y = 1, table.getn(dataList) do
-      table.insert(draw_list, 1, dataList[y].actor)
-    end
-  end
-  
-	-- Create a sample maze. You will want to replace this with a better maze
-  --[[
-	local x,y
-	for y=0,10 do
-		for x=0,10 do
-			local xtile = (y % 2) == 0
-			local ytile = (x % 3) == 0
-			local tile = nil
-			if xtile and ytile then
-				tile = Actor:new(Image("wall_cross.png"))
-			elseif xtile then
-				tile = Actor:new(Image("wall_straight.png"))
-			elseif ytile then
-				tile = Actor:new(Image("wall_straight.png", 90))
-			end
-
-			if tile then
-				tile.x = x*64
-				tile.y = y*64
-				table.insert(draw_list, 1, tile)
-			end
-		end
-	end
-  ]]--
-
-	-- Main loop
-	local delta_time = 0
-	local stop_game
-	repeat
-		-- Fill screen, otherwise SDL alpha blending doesn't work very well. Almost black.
-		SDL.SDL_FillRect(SYS_SCREEN, nil, 0x101010)
-
-		-- Update and draw all objects that have been registered
-		for _,v in pairs(update_list)	do v:update(delta_time) end
-		for _,v in pairs(draw_list)		do v:draw() end
-
-		--
-		stop_game, delta_time = SystemUpdate()
-	until stop_game == true
-
-	--
+  local game = Game:new()
+  game:InitGame()
+  game:Run() 
 	SystemQuit()
 end
 
